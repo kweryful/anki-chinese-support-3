@@ -19,6 +19,7 @@
 from .color import colorize_dict
 from .main import dictionary
 from .util import cleanup
+from .hanzi import split_hanzi, remove_empty
 
 
 def translate_local(hanzi, lang):
