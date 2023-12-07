@@ -32,23 +32,16 @@ def translate_local(hanzi, lang):
     if not defs:
         return ''
 
-    def multiple_pinyins(defs):
-        prev_p, _, _, _ = defs[0]
-        for pinyin, _, _, _ in defs:
-            if pinyin != prev_p:
-                return True
-        return False
+    res = '<br>'.join(['❖ %s[%s] %s%s' % (hanzi, pinyin, ('('+classifiers+') ' if classifiers else ''), definition) for pinyin, definition, classifiers, _ in defs])
 
-    res = ''
+    return colorize_dict(res.replace('\n', '; '))
 
-    for pinyin, definition, _, _ in defs:
-        if multiple_pinyins(defs):
-            res += '❖ %s[%s] %s\n' % (hanzi, pinyin, definition)
-        else:
-            res += ' \t' + definition + '\n'
 
-    return colorize_dict(res.replace('\n', '\n<br>'))
+def translate_gloss(hanzi, lang):
+    '''Return a gloss for a sentence'''
 
+    words = split_hanzi(hanzi)
+    return '<hr>'.join(remove_empty([translate_local(word, lang) for word in words]))
 
 def translate(hanzi, lang):
     hanzi = cleanup(hanzi)
@@ -56,4 +49,4 @@ def translate(hanzi, lang):
     if not hanzi or not lang:
         return ''
 
-    return translate_local(hanzi, lang)
+    return translate_gloss(hanzi, lang)
