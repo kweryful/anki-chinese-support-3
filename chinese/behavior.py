@@ -42,6 +42,22 @@ from .util import (
 
 # FIXME: Do all these return values actually do anything?
 
+def get_classifier(hanzi, note):
+    cs = dictionary.get_classifiers(hanzi)
+    text = ', '.join(colorize_dict(c) for c in cs)
+    if text and not has_any_field(config['fields']['classifier'], note):
+        return '<br>Cl: ' + text
+    return ''
+
+def get_alt(hanzi, note):
+    alts = dictionary.get_variants(hanzi)
+    alt = ', '.join(colorize_dict(a) for a in alts)
+    if alt:
+        if not has_any_field(config['fields']['alternative'], note):
+            return '<br>Also written: ' + alt
+        if get_first(config['fields']['alternative'], note) == '':
+            set_all(config['fields']['alternative'], note, to=alt)
+    return ''
 
 def split_classifiers(classifiers: list[str]) -> tuple[str, str]:
     # FIXME this needs tests written, 桌子 is a good one to test with
@@ -106,7 +122,10 @@ def fill_alt(hanzi, note):
 
 
 def fill_def(hanzi, note, lang):
+    classifier = get_classifier(hanzi, note)
+    alt = get_alt(hanzi, note)
     field = {'en': 'english', 'de': 'german', 'fr': 'french'}[lang]
+    print(field, config['fields'][field], has_any_field(config['fields'][field], note))
     filled = False
 
     if not has_any_field(config['fields'][field], note):
@@ -114,8 +133,9 @@ def fill_def(hanzi, note, lang):
 
     definition = ''
     if get_first(config['fields'][field], note) == '':
-        definition = translate(hanzi, lang).removesuffix('\n<br>')
+        definition = translate(hanzi, lang)
         if definition:
+            definition += classifier + alt
             set_all(config['fields'][field], note, to=definition)
             filled = True
 
@@ -126,8 +146,8 @@ def fill_all_defs(hanzi, note):
     n_filled = sum(
         [
             fill_def(hanzi, note, lang='en'),
-            fill_def(hanzi, note, lang='de'),
-            fill_def(hanzi, note, lang='fr'),
+            # fill_def(hanzi, note, lang='de'),
+            # fill_def(hanzi, note, lang='fr'),
         ]
     )
     return n_filled
