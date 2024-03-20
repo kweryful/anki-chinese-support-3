@@ -19,7 +19,7 @@
 from .color import colorize_dict
 from .main import dictionary
 from .util import cleanup
-from .hanzi import split_hanzi, remove_empty
+from .hanzi import split_hanzi, remove_empty, has_hanzi
 
 
 def translate_local(hanzi, lang):
@@ -31,6 +31,8 @@ def translate_local(hanzi, lang):
     defs = dictionary.get_definitions(hanzi, lang)
 
     if not defs:
+        if has_hanzi(hanzi):
+            return '❖ %s' % (hanzi)
         return ''
 
     res = '<br>'.join(['❖ %s[%s] %s%s' % (hanzi, pinyin, ('('+classifiers+') ' if classifiers else ''), definition) for pinyin, definition, classifiers, _ in defs])

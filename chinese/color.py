@@ -67,7 +67,7 @@ def colorize(words, target='pinyin', ruby_whole=False):
                         pattern = RUBY_REGEX
                     else:
                         pattern = HALF_RUBY_REGEX
-                    text += sub(pattern, _repl, syllable, IGNORECASE)
+                    text += sub(pattern, _repl, syllable, IGNORECASE).lower()
                 else:
                     text += f'<span class="tone5">{syllable}</span>'
         else:
