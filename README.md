@@ -82,13 +82,22 @@ Please see the bug tracker on [GitHub](https://github.com/Gustaf-C/anki-chinese-
 
 ## Changelog
 
+### 0.XX.X
+
+- **Bugfixes**
+  - Fix colorization of fields in editor (known issue: visual bug in editor with Anki 23.12.1 and earlier)
+
+### 0.17.1
+
+- **Bugfixes**
+  - Fix for Baidu TTS
+
 ### 0.17.0
 
 - **Features**
   - Improved clarity for when 汉字 button is clicked
   - No longer append classifier and alternates to definitions, use the appropriate fields instead
   - Introduced separate fields for simplified and traditional classifiers
-
 - **Bugfixes**
   - Allow using addon in both add note and browse windows at the same time (known issue: button will not update between windows)
   - Fixed crash after switching profile
